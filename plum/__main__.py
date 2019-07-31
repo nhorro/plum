@@ -8,7 +8,9 @@ from glob import glob
 VERSION_MAJOR=1
 VERSION_MINOR=0
 VERSION_REVISION=0
-TEMPLATE_PATH = "templates"
+
+TEMPLATE_PATH = os.path.dirname(os.path.realpath(__file__)) + "/templates"
+TEMPLATE_SPEC_FILENAME = "template.json"
 
 def list_project_templates():
     result = []
@@ -25,7 +27,7 @@ def process_file(filename, value_list):
         f.write(re.sub(r'\[(\w+)\]', lambda x: value_list.get(x.group(1), x.group(1)), text))
 
 
-def main():
+def plum_app():
     print("██████╗ ██╗     ██╗   ██╗███╗   ███╗██╗   ")
     print("██╔══██╗██║     ██║   ██║████╗ ████║██║   ")
     print("██████╔╝██║     ██║   ██║██╔████╔██║██║   ")
@@ -40,7 +42,7 @@ def main():
 
     try:
         if project_template == '':
-            print("Available project templates:")
+            print("Available project templates in %s:" % TEMPLATE_PATH )
             i = 0
             for t in available_templates:
                 print(" %d: %s" % (i, t) )
@@ -56,7 +58,7 @@ def main():
             sys.exit(0)
 
         # Input data (TODO: do from CLI)
-        with open("%s/%s/template.json" % (TEMPLATE_PATH, project_template)) as f:
+        with open("%s/%s/%s" % (TEMPLATE_PATH, project_template,TEMPLATE_SPEC_FILENAME)) as f:
             parameter_list = json.loads(f.read())
 
         value_list = {}
@@ -78,7 +80,7 @@ def main():
             # Copy template
             template_project_path = "%s/%s" % (TEMPLATE_PATH, project_template)
             print("Copying template %s " % template_project_path)
-            shutil.copytree(template_project_path, project_output_path, ignore=shutil.ignore_patterns('template.json') )                   
+            shutil.copytree(template_project_path, project_output_path, ignore=shutil.ignore_patterns(TEMPLATE_SPEC_FILENAME) )                   
 
             # Get all files in directory                    
             files = [f for f in glob(project_output_path + "**/*", recursive=True)]
@@ -91,9 +93,6 @@ def main():
             print("Project generation cancelled by user.")
             sys.exit(0)
     except KeyboardInterrupt:
-        print("Project generation cancelled by user.")
+        print("Project generation cancelled by user.")  
 
-if __name__ == "__main__":    
-    main()
-    
-
+plum_app()
