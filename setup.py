@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 def recursive_get_package_data():
-    package_files = glob.glob("plum/templates/**/*")
+    package_files = glob.glob("plum/data/**/*")
     print(package_files)
     return package_files
 
@@ -20,10 +20,15 @@ setuptools.setup(
     url="https://github.com/nhorro/plum",
     packages=setuptools.find_packages(),    
     include_package_data=True,
-    package_data={"plum": "plum/templates/**/*"},
+    package_data={"plum": recursive_get_package_data() },
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
+    entry_points={
+        "console_scripts": [
+            "plum = plum:plum_app"
+        ]
+    }
 )
