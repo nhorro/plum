@@ -9,7 +9,7 @@ VERSION_MAJOR=1
 VERSION_MINOR=0
 VERSION_REVISION=0
 
-TEMPLATE_PATH = os.path.dirname(os.path.realpath(__file__)) + "/templates"
+TEMPLATE_PATH = os.path.dirname(os.path.realpath(__file__)) + "/data/templates"
 TEMPLATE_SPEC_FILENAME = "template.json"
 
 def list_project_templates():
@@ -19,13 +19,11 @@ def list_project_templates():
         result.append(os.path.basename(os.path.normpath(t)))
     return result
 
-
 def process_file(filename, value_list):
     with open(filename) as f:
         text = f.read()        
     with open(filename, 'w') as f:
         f.write(re.sub(r'\[(\w+)\]', lambda x: value_list.get(x.group(1), x.group(1)), text))
-
 
 def plum_app():
     print("██████╗ ██╗     ██╗   ██╗███╗   ███╗██╗   ")
@@ -34,8 +32,12 @@ def plum_app():
     print("██╔═══╝ ██║     ██║   ██║██║╚██╔╝██║╚═╝   ")
     print("██║     ███████╗╚██████╔╝██║ ╚═╝ ██║██╗   ")
     print("╚═╝     ╚══════╝ ╚═════╝ ╚═╝     ╚═╝╚═╝   ")
-    print("Plum is a minimalistic project scaffolder.")
+    print("Plum is a minimalistic tool for project scaffolding.")
     print("Version %d.%d.%d                       " % (VERSION_MAJOR, VERSION_MINOR, VERSION_REVISION) )
+
+    #with open('data/config.json') as json_data_file:
+    #        config = json.load(json_data_file)
+
 
     available_templates = list_project_templates()
     project_template = ''
@@ -69,7 +71,7 @@ def plum_app():
             value_list[k]=value
 
         project_name = value_list['project_name']
-        project_output_path="output/%s/" % project_name
+        project_output_path="%s/%s/" % ("output",project_name)
 
         yes = input("Generate project '%s' in '%s' ? [Y]" % ( project_name, project_output_path))
         if 'Y' == yes or 'y' == yes or '' == yes:
@@ -83,10 +85,15 @@ def plum_app():
             shutil.copytree(template_project_path, project_output_path, ignore=shutil.ignore_patterns(TEMPLATE_SPEC_FILENAME) )                   
 
             # Get all files in directory                    
-            files = [f for f in glob(project_output_path + "**/*", recursive=True)]
+            files = glob(project_output_path + "**/*", recursive=True)
+            files.extend(glob(project_output_path + ".*", recursive=True)) #glob is not seeing .cproject and .project
+
             for f in files:
-                print("Processing file: ", f)
-                process_file(f, value_list)
+                if os.path.isfile(f):
+                    print("Processing file: ", f)
+                    process_file(f, value_list)
+                else:
+                    print("Skipping ", f)
 
             print("Project generation completed.")
         else:
