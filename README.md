@@ -22,6 +22,6 @@ python3 setup.py sdist
 Install plum-x.y.z.tar.gz and run from folder:
 
 ```bash
-python plum.py
+python3 plum
 ```
 

@@ -1,5 +1,7 @@
 # [project_name]
 
+[project_summary]
+
 ## Instructions
 
 This project assumes conda 'build' environment is used for C++ development.
