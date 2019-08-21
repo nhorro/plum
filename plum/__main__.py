@@ -38,7 +38,6 @@ def plum_app():
     #with open('data/config.json') as json_data_file:
     #        config = json.load(json_data_file)
 
-
     available_templates = list_project_templates()
     project_template = ''
 
