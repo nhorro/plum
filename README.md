@@ -11,10 +11,11 @@ Simple program in python to generate a project skeleton from templates in the sp
 
 ## Instructions
 
-### Build source distribution
+### Build and install source distribution
 
 ```bash
 python3 setup.py sdist
+pip install dist/plum-x.y.z.tar.gz 
 ```
 
 ### Usage
