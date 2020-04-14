@@ -7,7 +7,8 @@ Simple program in python to generate a project skeleton from templates in the sp
 | Template                    | Description                                               |
 | --------------------------- | --------------------------------------------------------- |
 | cpp_cmake_eclipse_conda_exe | C++ executable CMake Eclipse Project to build with conda. |
-| cpp_cmake                   | Simple C++ executable                                     |
+| cpp_cmake                   | Simple C++ executable.                                    |
+| python_standalone_app       | Simple Python standalone application.                     |
 
 ## Instructions
 
